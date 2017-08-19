@@ -1,0 +1,74 @@
+--7/6/2017
+Fix adding a centre with permissions. What happens is that the centre is added but when the web app redirects to the
+edit page the user doesn't have permission to edit that centre so it fails. --FIXED, user is given permission and the token is reissued.
+
+Can't Add user. Problem is that Person_id wasn't set. So Whichever look ups i performed Failed as person_id was null.
+--WONTFIX The person field should be treated as mandatory. During the testing phase give directions that users should fill
+out all fields on the view.
+
+-23/06/2017
+Convert all manually programmed Bootstrap components to Angular UI components
+    - Convert Bootstrap-Dialogs to modals in angular UI
+        -- current solution offers more versatility and don't have to edit the HTML of the view.
+
+Staff roster has to be updated to be like the excel roster they use right now.
+The screen is split up like so
+|         | Monday      | Tuesday     |
+|--------:|-------------|-------------|
+| Roll    |             |             |
+| Staff 1 | 09:30-12:00 | 09:30-12:00 |
+| Staff 2 | 13:00-17:00 | 12:00-17:00 |
+| Roll 2  |             |             |
+This is very complex and will need to investigate.
+
+We also need a more centralised way to manage routes. Currently if you wish to navigate to a route you have to manually
+enter it. If we need to change a route's URL for some reason it would break in multiple places. One solution is to create
+a service that has an enum of all the routes and a lookup table which corresponds the enum to a route URL.
+
+We also need to fix text so that it is i18n ready, for those chinese customers.
+https://angular-translate.github.io/docs/#/guide
+That looks like a promising library.
+------------------------------------------Final notes-------------------------------------------------------------------
+Saving on edit pages and error handling:
+We also need to refactor a lot of the code where the app saves the CRUD. This mainly occurs on Edit page where there are
+multiple ID's (due to joins). The app discards the ID when saving meaning that it can't be saved again. Usually this
+doesn't pose a problem , however if an error occurs and only a portion of the function is executed, the ID's of the
+records are lost leaving the user on the page and unable to save their data. If they try to save it may lead to
+corrupted data being saved (undefined behaviour).
+
+Defect List
+Known Issues:
+When Using Create/Edit Batch if there are more than 2100 parameters (MSSQL hard limit) the SQL will fail.
+    - Fix: Split up the data when inserting. Knex Batch Insert is not an option as it breaks in transactions.
+
+
+Enquiry:
+    List:
+        Status is displayed as ID rather than actual status.
+    There is no support to import a family account from an enquiry. This can be implemented easily though.
+    There is no transaction support. Needs to be fixed. --Very Important
+    Adding Children on the Edit page. --Fixed
+    The page doesn't go back when done.
+
+
+
+
+
+--Fixed
+MAJOR BUG:
+    After creating a booking (Booking Day pattern is created). We are no longer able to read Booking Day pattern and any
+    reads are hung or timeout.
+
+    How to reproduce:
+        - Create a booking with some days activated in the schedule, it doesn't matter if it's placed or not
+        - Save the booking
+        - Observe the server and web app as it failed to read from Booking Day Pattern, when the app goes to the list
+          page.
+
+    Cause/Issue:
+        This is because of knex's batch insert which isn't doesn't run correctly within a transaction.
+        The booking saves in a transaction and a call is made within that transaction to Knex's batch insert
+        which results in it Locking the table and trying to execute. The insert succeeds however it doesn't
+        unlock the table afterwards. Resulting in failed reads.
+    Fix:
+        Removed call to Knex.batchInsert() in favour of a normal insert operations.

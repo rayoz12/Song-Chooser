@@ -1,0 +1,19 @@
+﻿<div>
+    <input type="button" class="btn btn-primary pull-right" value="New" ng-click="TemplateListController.new()" />
+    <h2 class="text-center">Templates</h2>
+    <div class="panel-body">
+        <table class="table table-striped table-bordered">
+            <thead>
+            <tr>
+                <th>Name</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="template in templates" ng-click="TemplateListController.edit( template.id )">
+                <td>{{template.name}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <button type="button" class="btn btn-primary" ng-click="TemplateListController.back()">Back</button>
+</div>

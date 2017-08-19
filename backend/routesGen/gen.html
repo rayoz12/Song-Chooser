@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Routes Gen</title>
+</head>
+<body>
+    <h2>Get Table data from Server</h2>
+    <label>Table name: <input type="text" id="tableName"/></label>
+    <input type="button" value="GET" onclick="getFromServer()"/>
+    <h2>Parser</h2>
+    <textarea id="parseIn" cols="50" rows="10"></textarea>
+    <input type="button" value="Parse" onclick="parseDBText()">
+
+
+    <h2>Model</h2>
+    <label>Name of model: <input type="text" id="modelName"/></label>
+    <input type="button" value="New Field" onclick="newField()">
+    <div id="modelContainer">
+        <div id="0">
+            <label>Model Field: <input type="text" id="modelField0" value="id"/></label>
+            <label for="modelType0">Model Type: </label>
+            <select id="modelType0">
+                <option value="DATE">DATE</option>
+                <option value="TIME">TIME</option>
+                <option value="DATETIME">DATETIME</option>
+                <option value="BIGINT" selected>BIGINT</option>
+                <option value="INT">INT</option>
+                <option value="STRING">STRING</option>
+                <option value="MONEY">MONEY</option>
+            </select>
+        </div>
+    </div>
+    <h2>Routes</h2>
+
+    <input type="button" value="Generate Output" onclick="generate()">
+    <h2>Output</h2>
+    <h3>Model</h3>
+    <textarea id="modelOutput" cols="100" rows="10"></textarea>
+    <input type="button" value="download File" onclick="downloadModel()">
+    <h3>Route</h3>
+    <textarea id="routeOutput" cols="100" rows="10"></textarea>
+    <input type="button" value="download File" onclick="downloadRoute()">
+
+
+    <!--Template and script--->
+    <div id="template" hidden>
+        <label>Model Field: <input type="text" id="modelFieldtemplate"/></label>
+        <label for="modelTypetemplate">Model Type: </label>
+        <select id="modelTypetemplate">
+            <option value="DATE">DATE</option>
+            <option value="TIME">TIME</option>
+            <option value="DATETIME">DATETIME</option>
+            <option value="BIGINT">BIGINT</option>
+            <option value="INT">INT</option>
+            <option value="STRING">STRING</option>
+            <option value="MONEY">MONEY</option>
+        </select>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

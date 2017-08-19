@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+
+
+<!--suppress HtmlUnknownAnchorTarget -->
+<html ng-app="app">
+<head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="./img/favicon.ico">
+    <title>Song Chooser</title>
+</head>
+<body>
+<!--<div ng-hide="false" ng-include="'src/main/View/Templates/header-nav.html'"></div>-->
+<div ng-include="'header-nav.html'"></div>
+<div class="jumbotron jumbotronRemovePad">
+    <div class="container-fluid removeContainerPaddingLeft">
+        <!--THE ANGULAR APP IS HERE-->
+        <!--user is logged in, user isn't-->
+        <div class="col-md-offset-2 col-md-8">
+            <div ng-class="{ 'alert': flash, 'alert-success': flash.type === 'success', 'alert-danger': flash.type === 'error' }" ng-if="flash" ng-bind="flash.message"></div>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div ng-view autoscroll></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
