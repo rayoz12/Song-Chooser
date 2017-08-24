@@ -254,6 +254,8 @@ SmartChildCareWS/smartchildcarewebapp
 !/SmartChildCareWS/Images/profile/generic-profile.png
 !/SmartChildCareWS/Images/profile/readme.txt
 
+HTML_Files/
+
 .idea
 node_modules
 dist

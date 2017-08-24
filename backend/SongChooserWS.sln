@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "SongChooserWS", "SmartChildCareWS\SongChooserWS.njsproj", "{732F53B3-708F-43AE-8A9B-5FBCF5DA0E05}"
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "SongChooserWS", "SongChooserWS\SongChooserWS.njsproj", "{732F53B3-708F-43AE-8A9B-5FBCF5DA0E05}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -32,6 +32,11 @@
             </ul>
         </div>
 
+        <div class="row-fluid">
+            <button type="button" class="btn btn-primary" ng-click="SongChooserController.output()">Save</button>
+            <button type="button" class="btn btn-default" ng-click="SongChooserController.cancel()">Cancel</button>
+        </div>
+
         <div id="preview" class="preview">
             <h3>Main Page</h3>
             <div class="row-fluid">
@@ -39,11 +44,6 @@
                     <a class="h4" ng-click="viewSong(item)">{{item.song_name}}</a>
                 </div>
             </div>
-        </div>
-
-        <div class="row-fluid">
-            <button type="button" class="btn btn-primary" ng-click="SongChooserController.save()">Save</button>
-            <button type="button" class="btn btn-default" ng-click="SongChooserController.cancel()">Cancel</button>
         </div>
 
     </form>

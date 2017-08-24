@@ -141,6 +141,7 @@ export default function SongChooserController(CRUDService, $scope, $compile, $ro
     }
 
     function saveSong(song) {
+
         SongService.Update(song);
     }
 
@@ -182,6 +183,18 @@ export default function SongChooserController(CRUDService, $scope, $compile, $ro
         }
         return templateDetails;
     }
+
+    SongChooserController.output = function () {
+        for (let i = 0; i < $scope.songList.length; i++) {
+            const song = $scope.songList[i];
+            song.id = song.song_id;
+        }
+        console.log($scope.songList);
+        const newWindow = window.open();
+        SongService.customEndpoint('/package', {songList: $scope.songList, name: Date.now()},'post').then(data => {
+            newWindow.location = "http://" + data.zippedLocation;
+        });
+    };
 
 
     SongChooserController.cancel = function () {
