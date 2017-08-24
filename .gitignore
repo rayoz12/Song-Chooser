@@ -255,6 +255,7 @@ SmartChildCareWS/smartchildcarewebapp
 !/SmartChildCareWS/Images/profile/readme.txt
 
 HTML_Files/
+songs/
 
 .idea
 node_modules
