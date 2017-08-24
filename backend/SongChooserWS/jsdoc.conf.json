@@ -1,0 +1,38 @@
+{
+  "tags": {
+    "allowUnknownTags": true,
+    "dictionaries": [
+      "jsdoc"
+    ]
+  },
+  "source": {
+    "include": [
+      "./core/",
+      "./model/",
+      "./routes/"
+    ],
+    "includePattern": ".+\\.js$",
+    "excludePattern": "(docs)"
+  },
+  "plugins": [
+    "node_modules/jsdoc/plugins/markdown"
+  ],
+  "templates": {
+    "cleverLinks": true,
+    "monospaceLinks": true,
+    "navType": "vertical",
+    "theme": "spacelab",
+    "linenums": true,
+    "collapseSymbols": true,
+    "inverseNav": false
+  },
+  "opts": {
+    "template": "./node_modules/jsdoc/templates/default",
+    "encoding": "utf8",
+    "destination": "./docs/jsdoc",
+    "recurse": true,
+    "private": true,
+    "package": "./package.json",
+	"readme": "./README.md"
+  }
+}
