@@ -56,7 +56,7 @@ router.post("/package", function(req, res) {
         return fs.readFile(exportFolder + mainPageName[0]);
     }).then(data => {
         //data is main file text
-        const html = generateHTML(songList);
+        const html = generateMainHTML(songList);
         const main = data.toString().split("\n");
         main.splice(787, 0, html);
         var text = main.join("\n");
@@ -79,17 +79,38 @@ router.post("/package", function(req, res) {
         console.log(err);
         res.json(err);
     });
-
-
-    
 });
 
-function generateHTML(songList) {
+router.post("/generateSong", function (req, res) {
+    /*
+     * Title
+     * `<p align=center style='margin:0cm;margin-bottom:.0001pt;text-align:center'><b style='mso-bidi-font-weight:normal'><span lang=MS style='font-size:36.0pt; mso-bidi-font-size:12.0pt;font-family:"Arial Narrow",sans-serif;mso-bidi-font-family: Arial;color:#FFC000;mso-ansi-language:MS'>${title}<o:p></o:p></span></b></p>`;
+     * 
+     * paragrah heading
+     * `<p align=center style='margin:0cm;margin-bottom:.0001pt;text-align:center'><b style='mso-bidi-font-weight:normal'><span lang=MS style='font-size:48.0pt; font-family:"Arial Narrow",sans-serif;mso-bidi-font-family:Arial;color:#FFC000; mso-ansi-language:MS'>${lyrics[i].title}<o:p></o:p></span></b></p>
+     * 
+     * Line
+     * <p align=center style='margin:0cm;margin-bottom:.0001pt;text-align:center'><span lang=MS style='font-size:48.0pt;font-family:"Arial Narrow",sans-serif; mso-bidi-font-family:Arial;color:white;mso-themecolor:background1;mso-ansi-language:MS'>We shall arise at the sound of our name.<o:p></o:p></span></p>
+     */
+    //lyrics is an array of paragraphs(objects) which contain a title and text
+    const lyrics = req.body.lyrics;
+    const name = req.body.name;
+
+
+
+    for (let i = 0; i < lyrics.length; i++) {
+        const paragraph = lyrics[i];
+        
+    }
+});
+
+function generateMainHTML(songList) {
     let returnHtml = "";
     for (let i = 0; i < songList.length; i++) {
         const song = songList[i];
-        const basename = encodeURIComponent(path.basename(song.path)); //Amen.html
-        const html = `<p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt'><span lang=EN-US style='font-family:"Arial Narrow",sans-serif;mso-ansi-language:EN-US'><a href="${basename}"> ${song.song_name} </a><o:p></o:p></span></p>`;
+        const songName = song.template_song_name || song.song_name;
+        const basename = encodeURIComponent(path.basename(song.path)); //Amen.html this is the path
+        const html = `<p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt'><span lang=EN-US style='font-family:"Arial Narrow",sans-serif;mso-ansi-language:EN-US'><a href="${basename}"> ${songName} </a><o:p></o:p></span></p>`;
         returnHtml += html + "\n";
     }
     return returnHtml;

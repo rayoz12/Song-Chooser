@@ -261,3 +261,5 @@ songs/
 node_modules
 dist
 coverage
+backend/SongChooserWS/public/staged
+backend/SongChooserWS/public/zipped

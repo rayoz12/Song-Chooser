@@ -5,7 +5,6 @@
 
 import CRUDService from '../../Services/crud.service';
 import BootstrapDialog from 'bootstrap3-dialog';
-import IDManager from './../../Core/IDManager';
 import $ from 'jquery';
 
 const model = {
@@ -56,7 +55,6 @@ export default function SongChooserController(CRUDService, $scope, $compile, $ro
         TemplateDetailService.InnerJoin(templateSongJoin, {template_id}).then(data => {
             data.sort((a,b) => a.order_index - b.order_index);
             $scope.songList = data;
-            templateLoaded = true;
         })
     }
 
@@ -118,7 +116,6 @@ export default function SongChooserController(CRUDService, $scope, $compile, $ro
     $scope.selectSong = function(song) {
         $scope.songList.push(song);
         $scope.songSearch.length = 0;
-        song.template_song_name = null;
     };
 
     $scope.deleteSong = function(index) {
@@ -127,15 +124,9 @@ export default function SongChooserController(CRUDService, $scope, $compile, $ro
 
     $scope.editSongLocalName = function (song) {
         console.log(song);
-        let name;
-        if (song.template_song_name === null)
-            name = song.name;
-        else
-            name = song.template_song_name;
-
-        const response = window.prompt("New song name", name);
+        const response = window.prompt("New song name", song.song_name);
         if (response !== null) {
-            song.template_song_name = response;
+            song.song_name = response;
         }
     };
 
@@ -150,42 +141,25 @@ export default function SongChooserController(CRUDService, $scope, $compile, $ro
     }
 
     function saveSong(song) {
-        if (Array.isArray(song.id)) {
-            const id = song.id;
-            song.id = song.id[1];
-            SongService.Update(song);
-            song.id = id;
-        }
-        else {
-            SongService.Update(song);
-        }
 
+        SongService.Update(song);
     }
 
-    SongChooserController.saveTemplate = function(){
+
+    //TODO add checking to determine if it's a template that already exists.
+    SongChooserController.saveAsTemplate = function(){
         if (templateLoaded) {
-            TemplateDetailService.DeleteWhere({template_id: template_id}).then(() => {
-                TemplateDetailService.CreateBatch(generateTemplateDetails(template_id));
+            TemplateDetailService.DeleteWhere({template_id: templateID}).then(() => {
+                TemplateDetailService.CreateBatch(generateTemplateDetails(templateID));
             });
         }
         else {
-            BootstrapDialog.show({
-                type:BootstrapDialog.TYPE_DANGER,
-                message:"Can't save, Please \"Save as Template\" First",
-                buttons: [{
-                    label: "OK",
-                    action: dialog => {dialog.close()}
-                }]
-            });
+            const response = window.prompt("New song name", song.song_name);
+            if (response !== null) {
+                saveTemplate(name);
+            }
         }
-    };
 
-    //This saves a new template
-    SongChooserController.saveAsTemplate = function(){
-        const response = window.prompt("New template name", song.song_name);
-        if (response !== null) {
-            saveTemplate(response);
-        }
     };
 
     function saveTemplate(templateName) {
@@ -201,17 +175,10 @@ export default function SongChooserController(CRUDService, $scope, $compile, $ro
         let templateDetails = [];
         for (let i = 0; i < $scope.songList.length; i++) {
             const song = $scope.songList[i];
-            let songID;
-            if (Array.isArray(song.id))
-                songID = song.id[1];
-            else {
-                songID = song.id;
-            }
             templateDetails.push({
                 template_id: templateID,
-                song_id: songID,
+                song_id: song.id,
                 order_index: i,
-                template_song_name: song.template_song_name
             })
         }
         return templateDetails;
@@ -223,14 +190,10 @@ export default function SongChooserController(CRUDService, $scope, $compile, $ro
             song.id = song.song_id;
         }
         console.log($scope.songList);
-        const response = window.prompt("Export name");
-        if (response !== null) {
-            const newWindow = window.open();
-            SongService.customEndpoint('/package', {songList: $scope.songList, name: response},'post').then(data => {
-                newWindow.location = "http://" + data.zippedLocation;
-            });
-        }
-
+        const newWindow = window.open();
+        SongService.customEndpoint('/package', {songList: $scope.songList, name: Date.now()},'post').then(data => {
+            newWindow.location = "http://" + data.zippedLocation;
+        });
     };
 
 

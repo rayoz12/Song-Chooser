@@ -15,6 +15,7 @@ import 'jquery';
 import 'jquery-ui';
 import angular from 'angular';
 import 'bootstrap/dist/js/bootstrap.min';
+import 'bootstrap3-dialog/dist/css/bootstrap-dialog.min.css'
 import 'sortablejs';
 import 'angular-legacy-sortablejs-maintained'
 import 'angular-route';

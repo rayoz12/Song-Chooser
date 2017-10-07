@@ -39,7 +39,8 @@ app.use(morgan(function (tokens, req, res) {
 
 app.use("/Images", express.static(path.join(__dirname, "images"))); //Here set directory that holds images for the web app
 app.use("/HTML_Files", express.static(path.join(__dirname, "HTML_files"))); //Here set directory that will hold the songs
-app.use("/Public", express.static(path.join(__dirname, "public"))); //General public static directory
+app.use("/SongChooser", express.static(path.join(__dirname, "SongChooser"))); //Here set directory that will hold the songs
+app.use("/public", express.static(path.join(__dirname, "public"))); //General public static directory
 
 app.use(cookieParser());
 app.use(cors());

@@ -40,13 +40,13 @@ require("fs").readdirSync(normalizedPath).forEach(function (file, index) {
 console.log("[INIT] Loaded " + loadedFiles + "/" + (loadedFiles + errorFiles) + " files. " + errorFiles + " error(s) were encountered.");
 
 /**
-* @api {get} /SmartChildCare/ Requests the server to serve the Smart Child Care Web Application.
+* @api {get} /SongChooser/ Requests the server to serve the Smart Child Care Web Application.
 * @apiDescription This route does not need authentication.
 * @apiName SmartChildCare
 * @apiGroup Root
 */
-router.get("/SmartChildCare", (req, res) => {
-    let angularloc = path.resolve("./SmartChildCare", "index.html");
+router.get("/SongChooser", (req, res) => {
+    let angularloc = path.resolve("./SongChooser", "index.html");
     res.sendFile(angularloc);
 });
 

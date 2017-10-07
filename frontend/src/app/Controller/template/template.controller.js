@@ -34,4 +34,8 @@ export default function TemplateListController(CRUDService, $scope, $location) {
     TemplateListController.edit = function (id) {
         $location.url('/SongChooser/' + id)
     }
+
+    TemplateListController.new = function () {
+        $location.url('/SongChooser/')
+    }
 }

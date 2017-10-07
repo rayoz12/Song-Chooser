@@ -16,6 +16,12 @@ class IDManager {
             this.tableID[join.tableLeft] = ids[i];
         }
     }
+
+    getID(tableName){
+        if (!this.tableID.hasOwnProperty(tableName))
+            return null;
+        return this.tableID[tableName];
+    }
 }
 
 export default IDManager;

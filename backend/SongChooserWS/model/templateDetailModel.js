@@ -8,6 +8,7 @@ const model = {
 	template_id: ORM.Types.BIGINT,
 	song_id: ORM.Types.BIGINT,
 	order_index: ORM.Types.BIGINT,
+	template_song_name: ORM.Types.VARCHAR,
 }
 const modelInterface = new ORM.Table("TemplateDetail", model);
 
