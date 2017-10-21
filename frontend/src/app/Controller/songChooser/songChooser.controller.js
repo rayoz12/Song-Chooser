@@ -129,7 +129,7 @@ export default function SongChooserController(CRUDService, $scope, $compile, $ro
         console.log(song);
         let name;
         if (song.template_song_name === null)
-            name = song.name;
+            name = song.song_name;
         else
             name = song.template_song_name;
 

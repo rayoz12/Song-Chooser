@@ -56,7 +56,7 @@ router.post("/package", function(req, res) {
         return fs.readFile(exportFolder + mainPageName[0]);
     }).then(data => {
         //data is main file text
-        const html = generateMainHTML(songList);
+        const html = generateMainHtml(songList);
         const main = data.toString().split("\n");
         main.splice(787, 0, html);
         var text = main.join("\n");
@@ -90,21 +90,43 @@ router.post("/generateSong", function (req, res) {
      * `<p align=center style='margin:0cm;margin-bottom:.0001pt;text-align:center'><b style='mso-bidi-font-weight:normal'><span lang=MS style='font-size:48.0pt; font-family:"Arial Narrow",sans-serif;mso-bidi-font-family:Arial;color:#FFC000; mso-ansi-language:MS'>${lyrics[i].title}<o:p></o:p></span></b></p>
      * 
      * Line
-     * <p align=center style='margin:0cm;margin-bottom:.0001pt;text-align:center'><span lang=MS style='font-size:48.0pt;font-family:"Arial Narrow",sans-serif; mso-bidi-font-family:Arial;color:white;mso-themecolor:background1;mso-ansi-language:MS'>We shall arise at the sound of our name.<o:p></o:p></span></p>
+     * `<p align=center style='margin:0cm;margin-bottom:.0001pt;text-align:center'><span lang=MS style='font-size:48.0pt;font-family:"Arial Narrow",sans-serif; mso-bidi-font-family:Arial;color:white;mso-themecolor:background1;mso-ansi-language:MS'>We shall arise at the sound of our name.<o:p></o:p></span></p>`
      */
     //lyrics is an array of paragraphs(objects) which contain a title and text
+
+    const tempName = Date.now();
+    const exportFolder = stagedPath + tempName + path.sep;
+
     const lyrics = req.body.lyrics;
-    const name = req.body.name;
+    const title = req.body.title;
 
+    const songPageName = ["Main Page.htm", "Main Page_files"];
+    const destSongPath = [exportFolder + title + ".html", exportFolder + title + "_files"];
 
+    Promise.all([fs.copy(mainPageLocation[0], destSongPath[0]), fs.copy(mainPageLocation[1], destSongPath[1])]).then(() => {
+        console.log("Copied main file");
+    }).then(() => {
+        return fs.readFile(destSongPath[0]);
+    }).then(data => {
+        //data is main file text
+        const html = generateSongHtml(title, lyrics);
+        console.log(html);
+        const mainText = data.toString();
+        replacedText = mainText.replace(/Main_Stripped/g, title);
+        const main = replacedText.split("\n");
+        main.splice(787, 0, html);
+        var text = main.join("\n");
+        res.json({ success: 1, html });
 
-    for (let i = 0; i < lyrics.length; i++) {
-        const paragraph = lyrics[i];
-        
-    }
+        return fs.writeFile(destSongPath[0], text);
+    }).catch(e => {
+        console.error(e);
+    });
+
+    
 });
 
-function generateMainHTML(songList) {
+function generateMainHtml(songList) {
     let returnHtml = "";
     for (let i = 0; i < songList.length; i++) {
         const song = songList[i];
@@ -116,6 +138,31 @@ function generateMainHTML(songList) {
     return returnHtml;
 }
 
+function generateSongHtml(title, paragraphs) {
+    let song = generateTitle(title) + "<p></p>";
+    for (let i = 0; i < paragraphs.length; i++) {
+        song += generateParagraph(paragraphs[i].title, paragraphs[i].text) + "<p></p><p></p>";
+    }
+    return song;
+}
+
+function generateTitle(title) {
+    return `<p align=center style='margin:0cm;margin-bottom:.0001pt;text-align:center'><b style='mso-bidi-font-weight:normal'><span lang=MS style='font-size:36.0pt; mso-bidi-font-size:12.0pt;font-family:"Arial Narrow",sans-serif;mso-bidi-font-family: Arial;color:#FFC000;mso-ansi-language:MS'>${title}<o:p></o:p></span></b></p>`;
+}
+
+function generateVerseTitle(title) {
+    return `<p align=center style='margin:0cm;margin-bottom:.0001pt;text-align:center'><b style='mso-bidi-font-weight:normal'><span lang=MS style='font-size:48.0pt; font-family:"Arial Narrow",sans-serif;mso-bidi-font-family:Arial;color:#FFC000; mso-ansi-language:MS'>${title}<o:p></o:p></span></b></p>`;
+}
+
+function generateParagraph(title, text) {
+    let paragraph = generateVerseTitle(title) + "<p></p><p></p>";
+    const lines = text.split("\n");
+    for (let i = 0; i < lines.length; i++) {
+        paragraph += `<p align=center style='margin:0cm;margin-bottom:.0001pt;text-align:center'><span lang=MS style='font-size:48.0pt;font-family:"Arial Narrow",sans-serif; mso-bidi-font-family:Arial;color:white;mso-themecolor:background1;mso-ansi-language:MS'>${lines[i]}<o:p></o:p></span></p>`
+            + "<p></p> <p></p> \n\n";
+    }
+    return paragraph;
+}
 
 
 module.exports = router;
