@@ -22,8 +22,8 @@ const templateSongJoin = [{
 }];
 
 
-SongChooserController.$inject = [CRUDService, '$scope', '$compile', '$routeParams'];
-export default function SongChooserController(CRUDService, $scope, $compile, $routeParams) {
+SongChooserController.$inject = [CRUDService, '$scope', '$compile', '$routeParams', '$location'];
+export default function SongChooserController(CRUDService, $scope, $compile, $routeParams, $location) {
     const SongChooserController = this;
 
     const SongService = new CRUDService("Song");
@@ -235,6 +235,6 @@ export default function SongChooserController(CRUDService, $scope, $compile, $ro
 
 
     SongChooserController.cancel = function () {
-        history.back();
+		$location.url("/template")
     };
 }

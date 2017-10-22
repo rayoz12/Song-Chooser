@@ -1,5 +1,6 @@
 ﻿'use strict';
 //NOTE ALL IMPORTS ARE LOADED BEFORE FILE IS EXECUTED
+import "babel-polyfill";
 
 //import css
 import 'bootstrap/dist/css/bootstrap.css';

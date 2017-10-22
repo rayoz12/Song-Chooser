@@ -1,0 +1,39 @@
+﻿<div>
+    <h2 class="text-center">Song Maker</h2>
+    <div class="row">
+        <label for="song" class="col-md-1">Song Title</label>
+        <div class="col-md-11">
+            <input class="form-control" type="text" id="song" name="song" ng-model="title"/>
+        </div>
+    </div>
+	&nbsp;
+    <div id="verses" class="">
+        <div ng-repeat="verse in verses" class="panel panel-default">
+			<div class="panel-body">
+				<div class="row-fluid">
+					<label for="verseTitle{{$index}}" class="col-md-1">Verse Title</label>
+					<div class="col-md-11">
+						<input class="form-control" type="text" id="verseTitle{{$index}}" name="song" ng-model="verse.title"/>
+					</div>
+				</div>
+				&nbsp;
+				<div class="row-fluid">
+					<label for="verseText{{$index}}" class="col-md-1">Verse Text</label>
+					<div class="col-md-11">
+						<textarea class="form-control" id="verseText{{$index}}" ng-model="verse.text"></textarea>
+					</div>
+				</div>
+			</div>
+			<button type="button" class="btn btn-primary" ng-click="SongMakerController.remove($index)">Remove this Verse</button>
+        </div>
+    </div>
+	<div>
+        <button type="button" class="btn btn-primary pull-right" ng-click="SongMakerController.addVerse()">Add Verse</button>
+	</div>
+    <div class="row-fluid">
+        <button type="button" class="btn btn-primary" ng-click="SongMakerController.output()">Export</button>
+        <button type="button" class="btn btn-default" ng-click="SongMakerController.cancel()">Cancel</button>
+    </div>
+
+
+</div>

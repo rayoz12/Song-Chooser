@@ -10,6 +10,8 @@ const zippedPath = "./public/zipped/";
 const mainPageLocation = ["./public/static/Main_Stripped.htm", "./public/static/Main_Stripped_files"];
 const mainPageName = ["Main Page.htm", "Main Page_files"];
 
+const htmlFiles = "./HTML_Files/";
+
 const router = express.Router();
 
 const Song = require("../model/songModel");
@@ -72,7 +74,7 @@ router.post("/package", function(req, res) {
         });
     }).then(data => {
         //console.log(req.body);
-        
+        Song
         const zippedLocation = req.headers.host + (zippedPath + name + ".zip").slice(1);
         res.json({ success: 1, zippedLocation });
     }).catch(err => {
@@ -94,15 +96,14 @@ router.post("/generateSong", function (req, res) {
      */
     //lyrics is an array of paragraphs(objects) which contain a title and text
 
-    const tempName = Date.now();
-    const exportFolder = stagedPath + tempName + path.sep;
+    const exportFolder = htmlFiles;
 
     const lyrics = req.body.lyrics;
     const title = req.body.title;
 
     const songPageName = ["Main Page.htm", "Main Page_files"];
     const destSongPath = [exportFolder + title + ".html", exportFolder + title + "_files"];
-
+    //copy files
     Promise.all([fs.copy(mainPageLocation[0], destSongPath[0]), fs.copy(mainPageLocation[1], destSongPath[1])]).then(() => {
         console.log("Copied main file");
     }).then(() => {
@@ -112,13 +113,29 @@ router.post("/generateSong", function (req, res) {
         const html = generateSongHtml(title, lyrics);
         console.log(html);
         const mainText = data.toString();
-        replacedText = mainText.replace(/Main_Stripped/g, title);
+        const replacedText = mainText.replace(/Main_Stripped/g, title);
         const main = replacedText.split("\n");
         main.splice(787, 0, html);
-        var text = main.join("\n");
-        res.json({ success: 1, html });
-
+        const text = main.join("\n");
+        //write changes
         return fs.writeFile(destSongPath[0], text);
+    }).then(() => {
+        console.log("Wrote modified main.xml");
+        //modify file list to point to new name
+        const fileText =
+            `<xml xmlns:o="urn:schemas-microsoft-com:office:office">
+ <o:MainFile HRef="../${encodeURI(title + ".htm")}"/>
+ <o:File HRef="themedata.thmx"/>
+ <o:File HRef="colorschememapping.xml"/>
+ <o:File HRef="filelist.xml"/>
+</xml>`;
+        return fs.writeFile(destSongPath[1] + path.sep + "filelist.xml", fileText);
+    }).then(() => {
+        console.log("Wrote modified filelist.xml");
+        //add to DB now
+        return Song.create({ song_name: title, path: destSongPath[0]});
+    }).then(() => {
+        res.json({ success: 1, path: destSongPath[0] });
     }).catch(e => {
         console.error(e);
     });
