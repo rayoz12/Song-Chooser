@@ -47,6 +47,18 @@ export default function SongMakerController(CRUDService, $scope, $compile, $rout
 		$scope.verses.push({title: "", text: ""});
 	};
 
+	SongMakerController.importSong = function () {
+		const songTitle = prompt("Give the full name of the song which is in the HTML_Files directory. This includes the .htm\n" +
+			"For example: A New Commandment would be: A New Commandment.htm");
+		if (songTitle === null)
+			return;
+		SongService.Create({song_name: songTitle, path: "./HTML_Files/" + songTitle}).then(() => {
+			alert("saved");
+		}).catch((err) => {
+			alert("Failed: " + err);
+		})
+	};
+
     SongMakerController.cancel = function () {
         history.back();
     };

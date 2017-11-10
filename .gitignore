@@ -259,7 +259,7 @@ songs/
 
 .idea
 node_modules
-dist
+frontend/dist/
 coverage
 backend/SongChooserWS/public/staged
 backend/SongChooserWS/public/zipped
