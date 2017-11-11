@@ -4,6 +4,7 @@
 'use strict';
 
 import CRUDService from '../../Services/crud.service';
+import SettingsService from '../../Services/settings.service';
 import BootstrapDialog from 'bootstrap3-dialog';
 import $ from 'jquery';
 
@@ -25,8 +26,8 @@ const verse = {
 	text: ""
 };
 
-SongMakerController.$inject = [CRUDService, '$scope', '$compile', '$routeParams'];
-export default function SongMakerController(CRUDService, $scope, $compile, $routeParams) {
+SongMakerController.$inject = [CRUDService, '$scope', '$compile', '$routeParams', SettingsService];
+export default function SongMakerController(CRUDService, $scope, $compile, $routeParams, SettingsService) {
     const SongMakerController = this;
 
     const SongService = new CRUDService("Song");
@@ -38,8 +39,9 @@ export default function SongMakerController(CRUDService, $scope, $compile, $rout
 		let tab = window.open();
 		const postData = {title: $scope.title, lyrics: $scope.verses};
 		SongService.customEndpoint("/generateSong", postData, 'post').then(data => {
-			console.log("location:", data.path);
-			tab.location = data.path;
+			const url = SettingsService.apiAccess.slice(0,-1);
+			console.log("location:", url + data.path.slice(1));
+			tab.location = url + data.path.slice(1);
 		});
 	};
 

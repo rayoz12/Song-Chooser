@@ -5,6 +5,7 @@
 
 import CRUDService from '../../Services/crud.service';
 import BootstrapDialog from 'bootstrap3-dialog';
+import SettingsService from '../../Services/settings.service'
 import IDManager from './../../Core/IDManager';
 import $ from 'jquery';
 
@@ -22,8 +23,8 @@ const templateSongJoin = [{
 }];
 
 
-SongChooserController.$inject = [CRUDService, '$scope', '$compile', '$routeParams', '$location'];
-export default function SongChooserController(CRUDService, $scope, $compile, $routeParams, $location) {
+SongChooserController.$inject = [CRUDService, '$scope', '$compile', '$routeParams', '$location', SettingsService];
+export default function SongChooserController(CRUDService, $scope, $compile, $routeParams, $location, SettingsService) {
     const SongChooserController = this;
 
     const SongService = new CRUDService("Song");
@@ -145,7 +146,8 @@ export default function SongChooserController(CRUDService, $scope, $compile, $ro
 
     function setSongPreview(path) {
         const preview = document.getElementById("songPreview");
-        preview.src = "http://localhost:1337" + path.slice(1);
+		const url = SettingsService.apiAccess.slice(0,-1);
+        preview.src = url + path.slice(1);
         $scope.showSongPreview = true;
     }
 
