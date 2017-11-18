@@ -102,7 +102,7 @@ router.post("/generateSong", function (req, res) {
     const title = req.body.title;
 
     const songPageName = ["Main Page.htm", "Main Page_files"];
-    const destSongPath = [exportFolder + title + ".html", exportFolder + title + "_files"];
+    const destSongPath = [exportFolder + title + ".htm", exportFolder + title + "_files"];
     //copy files
     Promise.all([fs.copy(mainPageLocation[0], destSongPath[0]), fs.copy(mainPageLocation[1], destSongPath[1])]).then(() => {
         console.log("Copied main file");
@@ -178,6 +178,8 @@ function generateParagraph(title, text) {
         paragraph += `<p align=center style='margin:0cm;margin-bottom:.0001pt;text-align:center'><span lang=MS style='font-size:48.0pt;font-family:"Arial Narrow",sans-serif; mso-bidi-font-family:Arial;color:white;mso-themecolor:background1;mso-ansi-language:MS'>${lines[i]}<o:p></o:p></span></p>`
             + "<p></p> <p></p> \n\n";
     }
+    paragraph += `<p align=center style='margin:0cm;margin-bottom:.0001pt;text-align:center'><span lang=MS style='font-size:48.0pt;font-family:"Arial Narrow",sans-serif; mso-bidi-font-family:Arial;color:white;mso-themecolor:background1;mso-ansi-language:MS'>&nbsp;<o:p></o:p></span></p>`
+        + "<p></p> <p></p> \n\n";
     return paragraph;
 }
 
