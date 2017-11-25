@@ -10,6 +10,13 @@ const zippedPath = "./public/zipped/";
 const mainPageLocation = ["./public/static/Main_Stripped.htm", "./public/static/Main_Stripped_files"];
 const mainPageName = ["Main Page.htm", "Main Page_files"];
 
+const remoteControlLocation = "./public/static/remoteControl.js";
+const remoteControlName = "remoteControl.js";
+
+const jqueryLocation = "./public/static/jquery-3.2.1.min.js";
+const jqueryName = "jquery-3.2.1.min.js";
+
+
 const htmlFiles = "./HTML_Files/";
 
 const router = express.Router();
@@ -53,13 +60,15 @@ router.post("/package", function(req, res) {
         return Promise.all(promiseArr);
     }).then(data => {
         //copy main file
-        return Promise.all([fs.copy(mainPageLocation[0], exportFolder + mainPageName[0]), fs.copy(mainPageLocation[1], exportFolder + mainPageName[1])]);
+        return Promise.all([fs.copy(mainPageLocation[0], exportFolder + mainPageName[0]), fs.copy(mainPageLocation[1], exportFolder + mainPageName[1]),
+            fs.copy(remoteControlLocation, exportFolder + remoteControlName), fs.copy(jqueryLocation, exportFolder + jqueryName)]);
     }).then(data => {
         return fs.readFile(exportFolder + mainPageName[0]);
     }).then(data => {
         //data is main file text
         const html = generateMainHtml(songList);
         const main = data.toString().split("\n");
+        main.splice(8, 0, `<script src="${jqueryName}"></script>`);
         main.splice(787, 0, html);
         var text = main.join("\n");
 
@@ -152,6 +161,7 @@ function generateMainHtml(songList) {
         const html = `<p class=MsoNormal style='margin-bottom:0cm;margin-bottom:.0001pt'><span lang=EN-US style='font-family:"Arial Narrow",sans-serif;mso-ansi-language:EN-US'><a href="${basename}"> ${songName} </a><o:p></o:p></span></p>`;
         returnHtml += html + "\n";
     }
+    returnHtml += `<script src="${remoteControlName}"></script>`;
     return returnHtml;
 }
 
