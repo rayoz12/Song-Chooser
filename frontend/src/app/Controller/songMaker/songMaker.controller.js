@@ -32,6 +32,13 @@ export default function SongMakerController(CRUDService, $scope, $compile, $rout
 
     const SongService = new CRUDService("Song");
 
+	$scope.sortableConf = {
+		animation: 350,
+		chosenClass: 'sortable-chosen',
+		handle: '.grab-handle',
+		forceFallback: true,
+	};
+
     $scope.title = "";
 	$scope.verses = [{title: "", text: ""}];
 
@@ -47,6 +54,15 @@ export default function SongMakerController(CRUDService, $scope, $compile, $rout
 
 	SongMakerController.addVerse = function () {
 		$scope.verses.push({title: "", text: ""});
+	};
+
+	SongMakerController.remove = function (index) {
+		$scope.verses.splice(index, 1);
+	};
+
+	SongMakerController.duplicateVerse = function (index) {
+		const verse = $scope.verses[index];
+		$scope.verses.push({title: verse.title, text: verse.text});
 	};
 
 	SongMakerController.importSong = function () {

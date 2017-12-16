@@ -8,24 +8,30 @@
         </div>
     </div>
 	&nbsp;
-    <div id="verses" class="">
+    <div id="verses" ng-sortable=sortableConf>
         <div ng-repeat="verse in verses" class="panel panel-default">
 			<div class="panel-body">
 				<div class="row-fluid">
 					<label for="verseTitle{{$index}}" class="col-md-1">Verse Title</label>
-					<div class="col-md-11">
+					<div class="col-md-9">
 						<input class="form-control" type="text" id="verseTitle{{$index}}" name="song" ng-model="verse.title"/>
+					</div>
+					<div class="col-md-2">
+						<i class="fa fa-bars fa-3x grab-handle pull-right" aria-hidden="true"></i>
 					</div>
 				</div>
 				&nbsp;
 				<div class="row-fluid">
 					<label for="verseText{{$index}}" class="col-md-1">Verse Text</label>
 					<div class="col-md-11">
-						<textarea class="form-control" id="verseText{{$index}}" ng-model="verse.text"></textarea>
+						<textarea class="form-control" id="verseText{{$index}}" ng-model="verse.text" rows="10"></textarea>
 					</div>
 				</div>
 			</div>
 			<button type="button" class="btn btn-primary" ng-click="SongMakerController.remove($index)">Remove this Verse</button>
+			<span class="pull-right">
+				<button type="button" class="btn btn-primary" ng-click="SongMakerController.duplicateVerse($index)">Duplicate this Verse</button>
+			</span>
         </div>
     </div>
 	<div>
