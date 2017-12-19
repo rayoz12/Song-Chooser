@@ -166,9 +166,15 @@ export default function SongChooserController(CRUDService, $scope, $compile, $ro
 
     SongChooserController.saveTemplate = function(){
         if (templateLoaded) {
-            TemplateDetailService.DeleteWhere({template_id: template_id}).then(() => {
-                TemplateDetailService.CreateBatch(generateTemplateDetails(template_id));
-            });
+			let transactionID;
+            TemplateDetailService.newTransaction().then(data => {
+				transactionID = data.transaction_id;
+				return TemplateDetailService.TransactionDeleteWhere({template_id: template_id}, transactionID);
+			}).then(() => {
+            	return TemplateDetailService.TransactionCreateBatch(generateTemplateDetails(template_id), transactionID);
+			}).then(() => {
+            	return TemplateDetailService.runTransaction(transactionID);
+			});
         }
         else {
             BootstrapDialog.show({
