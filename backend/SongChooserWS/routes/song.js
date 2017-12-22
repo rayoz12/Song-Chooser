@@ -49,13 +49,21 @@ router.post("/package", function(req, res) {
     }).then(() => {
         //copy all selected music files
         const promiseArr = [];
+        const songPaths = [];//keeps track of songs that are used so that we know a duplicate has been encountered and we don't need to copy the files again.
         for (let i = 0; i < songList.length; i++) {
             const song = songList[i];
             console.log(song.path);
             const basename = path.basename(song.path); //Amen.html
             const fileName = song.path.substring(0, song.path.lastIndexOf('.')); //Amen
+
+            //check if duplicate
+            if (songPaths.includes(basename)) {
+                console.log("[INFO] Duplicate Song encountered, not copying files again.");
+                continue;
+            }
             promiseArr.push(fs.copy(fileName + "_files", exportFolder + basename.substring(0, basename.lastIndexOf('.')) + "_files"));
             promiseArr.push(fs.copy(song.path, exportFolder + basename));
+            songPaths.push(basename);
         }
         return Promise.all(promiseArr);
     }).then(data => {

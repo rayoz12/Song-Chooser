@@ -52,7 +52,7 @@ router.get("/SongChooser", (req, res) => {
 
 /* GET home page. */
 router.get("/", function (req, res) {
-    res.sendFile(path.resolve("./views", "index.html"));
+    res.redirect("/SongChooser");
 });
 
 module.exports = router;

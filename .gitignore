@@ -264,3 +264,6 @@ coverage
 backend/SongChooserWS/public/staged
 backend/SongChooserWS/public/zipped
 backend/SongChooserWS/SongChooser/*
+
+apidoc
+JSDoc
