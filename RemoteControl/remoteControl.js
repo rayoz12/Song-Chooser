@@ -24,6 +24,12 @@ css = `
 .controlText {
 	color: white;
 }
+
+#controls {
+	float: right;
+	position: sticky;
+	top: 0px;
+}
 `;
 
 let sheet = document.createElement('style');
@@ -60,23 +66,26 @@ scrollInterval = null;
 
 
 function init() {
-	//
+		
+	const controlsDiv = document.createElement("div");
+	controlsDiv.id = "controls";
+	
 	const h1 = document.createElement("h1");
 	h1.innerHTML = "Controls";
 	h1.classList = "controlText";
 
-	const linksDiv = document.getElementsByClassName("WordSection1")[0];
-
-	linksDiv.appendChild(h1);
+	controlsDiv.appendChild(h1);
 
 	for (let i = 0; i < scrollConfig.length; i++) {
 		const scroll = scrollConfig[i];
 		const button = document.createElement("button");
 		button.innerHTML = scroll.text;
 		button.addEventListener("click", scroll.clickHandler);
-		linksDiv.appendChild(button);
+		controlsDiv.appendChild(button);
 	}
-
+	
+	const linksDiv = document.getElementsByClassName("WordSection1")[0];
+	$(linksDiv).prepend(controlsDiv);
 }
 
 
