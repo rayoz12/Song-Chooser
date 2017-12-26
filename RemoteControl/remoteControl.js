@@ -18,17 +18,40 @@ const scrollConfig = [{
 }];
 
 
+function Log(timestampEnabled) {
+	this.timestampEnabled = timestampEnabled;
+}
+
+Log.prototype.log = function (string) {
+	let logString = "";
+	if (this.timestampEnabled)
+		logString += new Date().toString();
+}
+
+Log.prototype.warning = function (string) {
+	
+}
+
+Log.prototype.error = function (string) {
+	
+}
+
 //Style sheet
 
 css = `
-.controlText {
+.text {
 	color: white;
 }
 
-#controls {
+#UIDiv {
 	float: right;
 	position: sticky;
 	top: 0px;
+}
+
+.scrollInfo {
+	padding-top: 5%;
+	font-size: 2em;
 }
 `;
 
@@ -66,13 +89,31 @@ scrollInterval = null;
 
 
 function init() {
-		
+	
+	const UIDiv = $('<div/>', {
+		id: "UIDiv",
+	});
+	
+	UIDiv.attr("class", "text")
+	
 	const controlsDiv = document.createElement("div");
 	controlsDiv.id = "controls";
 	
+	const scrollInfo = $('<div/>', {
+		id: "scrollInfo",
+		text: "Scroll: 0/0"
+	});
+	const scrollPercent = $('<div/>', {
+		id: "scrollPercent",
+		text: "Scroll: 0/100%"
+	});
+	
+	scrollInfo.attr("class", "scrollInfo");
+	scrollPercent.attr("class", "scrollInfo");
+	
 	const h1 = document.createElement("h1");
 	h1.innerHTML = "Controls";
-	h1.classList = "controlText";
+	h1.classList = "text";
 
 	controlsDiv.appendChild(h1);
 
@@ -84,8 +125,12 @@ function init() {
 		controlsDiv.appendChild(button);
 	}
 	
+	UIDiv.append(controlsDiv);
+	UIDiv.append(scrollInfo);
+	UIDiv.append(scrollPercent);
+	
 	const linksDiv = document.getElementsByClassName("WordSection1")[0];
-	$(linksDiv).prepend(controlsDiv);
+	$(linksDiv).prepend(UIDiv);
 }
 
 
@@ -106,6 +151,13 @@ $("a").on("click", function (e) {
 	console.log(this);
 	e.preventDefault();
 });
+
+
+function updateScroll(currentScroll, maxScroll) {
+	$("#scrollInfo").text(`Scroll Info: ${currentScroll}/${maxScroll}`);
+	const perecent = Math.round((currentScroll / maxScroll) * 100);
+	$("#scrollPercent").text(`Scroll Percent: ${perecent}%`);
+}
 
 function openWindow(url) {
 	dispWindow = window.open(url);
@@ -146,6 +198,7 @@ function scrollWindow(windowRef, pixelsScroll, intervalLength) {
 			console.log("Reached end of page");
 			clearInterval(scrollInterval);
 		}
+		updateScroll(windowRef.document.body.scrollTop, windowRef.document.body.scrollHeight - windowRef.document.body.clientHeight);
 	}, intervalLength); // 10 milliseconds
 }
 
