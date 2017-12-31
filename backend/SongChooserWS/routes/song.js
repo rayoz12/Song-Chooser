@@ -33,6 +33,22 @@ router.get("/songSearch", function (req, res) {
     });
 });
 
+router.post("/uploadSong", function (req, res) {
+    if (!req.files)
+        return res.status(400).json({ success: 0, err: "No files were uploaded." });
+
+    // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
+    const song = req.files.song;
+
+    // Use the mv() method to place the file somewhere on your server
+    song.mv(`${htmlFiles}${song.name}`, function (err) {
+        if (err)
+            return res.status(500).json({ success: 0, err });
+
+        res.json({ success: 1 });
+    });
+});
+
 router.post("/package", function(req, res) {
     const songList = req.body.songList;
     const name = req.body.name;

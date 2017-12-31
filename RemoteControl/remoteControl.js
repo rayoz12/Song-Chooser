@@ -15,6 +15,9 @@ const scrollConfig = [{
 },{
 	text: "Stop Scroll",
 	clickHandler: scrollStop
+},{
+	text: "Top of page",
+	clickHandler: pageTop
 }];
 
 
@@ -51,7 +54,7 @@ css = `
 
 .scrollInfo {
 	padding-top: 5%;
-	font-size: 2em;
+	font-size: 1em;
 }
 `;
 
@@ -182,6 +185,12 @@ function scrollFast() {
 	if (scrollInterval !== null)
 		clearInterval(scrollInterval);
 	scrollInterval = scrollWindow(dispWindow, 3, 10);
+}
+
+function pageTop() {
+	if (scrollInterval !== null)
+		clearInterval(scrollInterval);
+	windowRef.document.body.scrollTop = 0;
 }
 
 function scrollStop() {

@@ -7,11 +7,13 @@
 
 let express = require("express");
 let bodyParser = require("body-parser");
+const fileUpload = require("express-fileupload");
 let app = express();
 let morgan = require("morgan");
 // create application/json parser 
 let jsonParser = bodyParser.json();
-let urlencodedParser = bodyParser.urlencoded({ extended: false });
+//let urlencodedParser = bodyParser.urlencoded({ extended: false });
+app.use(fileUpload({ preserveExtension: true}));
 app.use(jsonParser);
 
 // create application/x-www-form-urlencoded parser 

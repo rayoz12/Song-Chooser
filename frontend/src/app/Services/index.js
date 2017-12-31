@@ -6,6 +6,7 @@ import DialogService from '../Services/dialog.service';
 import FlashService from '../Services/flash.service';
 import SettingsService from '../Services/settings.service';
 import UtilityService from '../Services/utility.service';
+import SongService from './song.service'
 /**
  * App services
  * @namespace app.services
@@ -18,4 +19,5 @@ export default angular
         FlashService,
         SettingsService,
         UtilityService,
+		SongService,
     ]).name;
