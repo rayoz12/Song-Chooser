@@ -42,6 +42,7 @@ app.use(morgan(function (tokens, req, res) {
     return [
         moment().format("DD/MM/YY HH:mm:ss"), "|",
         ip,
+        `"${req.headers["user-agent"]}"`, "\n",
         cyanColour + tokens.method(req, res) + resetColour,
         statusColour + tokens.url(req, res) + resetColour,
         statusColour + tokens.status(req, res) + resetColour, "-",
