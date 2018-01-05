@@ -35,9 +35,13 @@ app.use(morgan(function (tokens, req, res) {
     let statusColour = res.statusCode < 400 ? "\x1b[32m" : "\x1b[31m";//green : red
     let resetColour = "\x1b[0m";
     let cyanColour = "\x1b[36m";
+    let ip = req.ip;
+    if (ip.substr(0, 7) == "::ffff:") {
+        ip = ip.substr(7);
+    }
     return [
         moment().format("DD/MM/YY HH:mm:ss"), "|",
-        req.ip,
+        ip,
         cyanColour + tokens.method(req, res) + resetColour,
         statusColour + tokens.url(req, res) + resetColour,
         statusColour + tokens.status(req, res) + resetColour, "-",
