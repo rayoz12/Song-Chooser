@@ -22,6 +22,7 @@ let path = require("path");
 let util = require("util");
 let cors = require("cors");
 let cookieParser = require("cookie-parser");
+const moment = require("moment"); 
 
 util.inspect.defaultOptions = { colors: true, depth: null, maxArrayLength: 20 }
 
@@ -35,7 +36,8 @@ app.use(morgan(function (tokens, req, res) {
     let resetColour = "\x1b[0m";
     let cyanColour = "\x1b[36m";
     return [
-        new Date().toLocaleString("en-AU"), "|",
+        moment().format("DD/MM/YY HH:mm:ss"), "|",
+        req.ip,
         cyanColour + tokens.method(req, res) + resetColour,
         statusColour + tokens.url(req, res) + resetColour,
         statusColour + tokens.status(req, res) + resetColour, "-",

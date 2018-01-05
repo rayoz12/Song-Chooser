@@ -107,7 +107,6 @@ router.post("/package", function(req, res) {
         });
     }).then(data => {
         //console.log(req.body);
-        Song
         const zippedLocation = req.headers.host + (zippedPath + name + ".zip").slice(1);
         res.json({ success: 1, zippedLocation });
     }).catch(err => {

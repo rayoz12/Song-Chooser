@@ -31,7 +31,12 @@ export default function SongUploadController(CRUDService, SongService, $scope) {
 		let file = elem.files[0];
 
 		SongService.UploadSong(file).then(data => {
-			console.log(data);
+			if (data.success) {
+				alert("Saved.")
+			}
+		}).catch(err => {
+		    alert(err);
+		    console.log(err);
 		});
 	};
 

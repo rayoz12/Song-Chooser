@@ -37,7 +37,11 @@ require("fs").readdirSync(normalizedPath).forEach(function (file, index) {
     }
     console.log("[INIT]\x1b[32m Loaded: " + file + ", on Route: " + camel + "\x1b[0m");
 });
-console.log("[INIT] Loaded " + loadedFiles + "/" + (loadedFiles + errorFiles) + " files. " + errorFiles + " error(s) were encountered.");
+
+if (errorFiles > 0)
+    console.log("[INIT]\x1b[31m Loaded " + loadedFiles + "/" + (loadedFiles + errorFiles) + " files. " + errorFiles + " error(s) were encountered." + "\x1b[0m");
+else
+    console.log("[INIT] Loaded " + loadedFiles + "/" + (loadedFiles + errorFiles) + " files. " + errorFiles + " error(s) were encountered.");
 
 /**
 * @api {get} /SongChooser/ Requests the server to serve the Smart Child Care Web Application.
