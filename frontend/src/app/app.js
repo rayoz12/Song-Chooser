@@ -5,6 +5,7 @@ import "babel-polyfill";
 //import css
 import 'bootstrap/dist/css/bootstrap.css';
 import 'font-awesome/css/font-awesome.min.css';
+import 'angular-ui-notification/dist/angular-ui-notification.min.css'
 import 'jquery-ui-themes/themes/flick/jquery-ui.min.css';
 import 'jquery-ui-themes/themes/flick/theme.css';
 import 'angular-xeditable/dist/css/xeditable.min.css';
@@ -22,6 +23,7 @@ import 'angular-legacy-sortablejs-maintained'
 import 'angular-route';
 import 'angular-xeditable';
 import 'angular-file-saver';
+import 'angular-ui-notification/dist/angular-ui-notification.min'
 import angularUI from 'angular-ui-bootstrap';
 //locales
 import 'moment/min/locales.min';
@@ -45,7 +47,7 @@ import controllers from './Controller';
  * The entry point of the web app
  * @namespace app
  */
-const app = angular.module('app', ['ngRoute', 'xeditable', "ng-sortable", angularUI, controllers, services, directives, filters]);
+const app = angular.module('app', ['ngRoute', 'xeditable', "ng-sortable", 'ui-notification', angularUI, controllers, services, directives, filters]);
 app.config(config);
 app.config(routing);
 app.run(run);

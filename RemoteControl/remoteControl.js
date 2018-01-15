@@ -1,6 +1,8 @@
 //extremely hacky way doing this.
 
 //config
+const headingColour = "#FFC000";
+const headingSelector = `span[style*="color:${headingColour}"`
 
 //scroll config
 const scrollConfig = [{
@@ -15,9 +17,6 @@ const scrollConfig = [{
 },{
 	text: "Stop Scroll",
 	clickHandler: scrollStop
-},{
-	text: "Top of page",
-	clickHandler: pageTop
 }];
 
 
@@ -54,7 +53,20 @@ css = `
 
 .scrollInfo {
 	padding-top: 5%;
-	font-size: 1em;
+	font-size: 2em;
+}
+
+.headingsList {
+	max-height: 100px;
+	height: auto;
+	overflow-y: scroll;
+	border: 1px solid white;
+}
+
+.headingsList>span{
+	cursor: pointer;
+	text-decoration: underline;
+	color: #0563C1;
 }
 `;
 
@@ -87,6 +99,8 @@ window.clearInterval = function(intervalID)
 	window.originalClearInterval(intervalID);
 };
 
+
+//GLOBAL VARIABLES
 dispWindow = null;
 scrollInterval = null;
 
@@ -97,22 +111,26 @@ function init() {
 		id: "UIDiv",
 	});
 	
-	UIDiv.attr("class", "text")
-	
 	const controlsDiv = document.createElement("div");
 	controlsDiv.id = "controls";
 	
-	const scrollInfo = $('<div/>', {
-		id: "scrollInfo",
-		text: "Scroll: 0/0"
-	});
 	const scrollPercent = $('<div/>', {
 		id: "scrollPercent",
-		text: "Scroll: 0/100%"
+		text: "Scroll: 0/100%",
+		class: "text scrollInfo"
 	});
 	
-	scrollInfo.attr("class", "scrollInfo");
-	scrollPercent.attr("class", "scrollInfo");
+	const headings = $('<h2/>', {
+		id: "headings",
+		text: "Headings",
+		class: "text"
+	});
+	
+	const headingsList = $('<div/>', {
+		id: "headingsList",
+		text: "Headings.......",
+		class: "text headingsList"
+	});
 	
 	const h1 = document.createElement("h1");
 	h1.innerHTML = "Controls";
@@ -129,14 +147,13 @@ function init() {
 	}
 	
 	UIDiv.append(controlsDiv);
-	UIDiv.append(scrollInfo);
 	UIDiv.append(scrollPercent);
+	UIDiv.append(headings);
+	UIDiv.append(headingsList);
 	
 	const linksDiv = document.getElementsByClassName("WordSection1")[0];
 	$(linksDiv).prepend(UIDiv);
 }
-
-
 
 $("a").on("click", function (e) {
 	console.log(dispWindow);
@@ -151,22 +168,55 @@ $("a").on("click", function (e) {
 			openWindow(this.href);
 		}
 	}
+	setTimeout(() => {
+		targetWindowLoaded();
+	}, 100);
 	console.log(this);
 	e.preventDefault();
 });
 
+//called whenever the target window loads a new page.
+function targetWindowLoaded() {
+	getHeadings();
+}
 
-function updateScroll(currentScroll, maxScroll) {
-	$("#scrollInfo").text(`Scroll Info: ${currentScroll}/${maxScroll}`);
-	const perecent = Math.round((currentScroll / maxScroll) * 100);
-	$("#scrollPercent").text(`Scroll Percent: ${perecent}%`);
+function getHeadings() {
+	let targetWindowHeadings = $(headingSelector, dispWindow.document);
+	console.log("elems", targetWindowHeadings);
+	const headings = $("#headingsList")
+	headings.text("");
+	for(let i = 0; i < targetWindowHeadings.length; i++) {
+		let innerHTML = targetWindowHeadings[i].innerHTML;
+		let cleanTitle = innerHTML.replace(`<o:p></o:p>`, "");
+		let newElem = $('<span/>', {
+			text: cleanTitle,
+		});
+		newElem.on("click", function (e) {
+			scrollToElem(targetWindowHeadings[i], dispWindow);
+			//console.log(this);
+		});
+		headings.append(newElem);
+		headings.append(`<br/>`);
+	}
 }
 
 function openWindow(url) {
 	dispWindow = window.open(url);
 	$(dispWindow).on('load', () => {
 	    console.log("loaded on url:", dispWindow.location.href);
+		targetWindowLoaded();
 	});
+}
+
+function scrollToElem(elem, windowContext) {
+	$('html, body', windowContext.document).stop().animate({
+        scrollTop: $(elem).offset().top
+    }, 2000);
+}
+
+function updateScroll(currentScroll, maxScroll) {
+	const perecent = Math.round((currentScroll / maxScroll) * 100);
+	$("#scrollPercent").text(`Scroll Percent: ${perecent}%`);
 }
 
 function scrollSlow() {
@@ -185,12 +235,6 @@ function scrollFast() {
 	if (scrollInterval !== null)
 		clearInterval(scrollInterval);
 	scrollInterval = scrollWindow(dispWindow, 3, 10);
-}
-
-function pageTop() {
-	if (scrollInterval !== null)
-		clearInterval(scrollInterval);
-	windowRef.document.body.scrollTop = 0;
 }
 
 function scrollStop() {

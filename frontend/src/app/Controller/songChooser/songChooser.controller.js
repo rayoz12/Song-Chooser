@@ -23,8 +23,8 @@ const templateSongJoin = [{
 }];
 
 
-SongChooserController.$inject = [CRUDService, '$scope', '$compile', '$routeParams', '$location', SettingsService];
-export default function SongChooserController(CRUDService, $scope, $compile, $routeParams, $location, SettingsService) {
+SongChooserController.$inject = [CRUDService, '$scope', '$compile', '$routeParams', '$location', SettingsService, 'Notification'];
+export default function SongChooserController(CRUDService, $scope, $compile, $routeParams, $location, SettingsService, Notification) {
     const SongChooserController = this;
 
     const SongService = new CRUDService("Song");
@@ -152,20 +152,30 @@ export default function SongChooserController(CRUDService, $scope, $compile, $ro
     }
 
     function saveSong(song) {
+		Notification({message: 'Saving...'});
         if (Array.isArray(song.id)) {
             const id = song.id;
             song.id = song.id[1];
-            SongService.Update(song);
-            song.id = id;
+            SongService.Update(song).then(() => {
+            	song.id = id;
+				Notification.success({message: "Saved"});
+            }).catch(e => {
+            	Notification.error({message: "Failed to Save"});
+			});
         }
         else {
-            SongService.Update(song);
+            SongService.Update(song).then(() => {
+				Notification.success({message: "Saved"});
+			}).catch(e => {
+				Notification.error({message: "Failed to Save"});
+			});
         }
 
     }
 
     SongChooserController.saveTemplate = function(){
         if (templateLoaded) {
+			Notification({message: 'Saving...'});
 			let transactionID;
             TemplateDetailService.newTransaction().then(data => {
 				transactionID = data.transaction_id;
@@ -174,6 +184,10 @@ export default function SongChooserController(CRUDService, $scope, $compile, $ro
             	return TemplateDetailService.TransactionCreateBatch(generateTemplateDetails(template_id), transactionID);
 			}).then(() => {
             	return TemplateDetailService.runTransaction(transactionID);
+			}).then(() => {
+				Notification.success({message: "Saved"});
+			}).catch(e => {
+				Notification.error({message: "Failed to Save."});
 			});
         }
         else {
