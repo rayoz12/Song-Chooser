@@ -1,7 +1,7 @@
 ﻿const settings = require("../settings");
 
 var knex = require("knex")({
-    client: "mssql",
+    client: "mysql",
     debug: true,
     connection: settings.dbConfig
 });

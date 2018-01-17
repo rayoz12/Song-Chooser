@@ -10,10 +10,10 @@
 //};
 
 exports.dbConfig = {
-    user: "sa",
     password: "password",
-    host: "localhost\\SQLEXPRESS",
-    database: "SongChooser",
+    user: "root",
+	host: "localhost",
+    database: "songchooser",
 };
 
 exports.saltRounds = 10;
