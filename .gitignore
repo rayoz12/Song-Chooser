@@ -254,17 +254,13 @@ SmartChildCareWS/smartchildcarewebapp
 !/SmartChildCareWS/Images/profile/generic-profile.png
 !/SmartChildCareWS/Images/profile/readme.txt
 
-HTML_Files/
 songs/
 
 .idea
 node_modules
 frontend/dist/
 coverage
-backend/SongChooserWS/public/staged
-backend/SongChooserWS/public/zipped
 backend/SongChooserWS/SongChooser/*
 
 apidoc
 JSDoc
-/backend/SongChooserWS/HTML_Files.7z

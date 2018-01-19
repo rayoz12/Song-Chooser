@@ -243,14 +243,3 @@ ModelManifest.xml
 .fake/
 
 #Custom
-SmartChildCareWS/smartchildcarewebapp
-/SmartChildCareWS/SmartChildCare/*
-/SmartChildCareWS/docs/express-app3/0.0.0
-/SmartChildCareWS/docs/apidoc
-/SmartChildCareWS/Images/profile/*
-/SmartChildCareWS/public/documents
-/SmartChildCareWS/docs/jsdoc/smartchildcarewebservice/0.2.0
-
-
-!/SmartChildCareWS/Images/profile/generic-profile.png
-!/SmartChildCareWS/Images/profile/readme.txt
