@@ -45,7 +45,7 @@ function SettingsService($rootScope) {
      * @type {string}
      * @memberOf app.services.SettingsService
      */
-    const url = document.domain;
+    const url = document.domain;// + location.pathname.slice(0, -1);
 
     /**
      * Port of API

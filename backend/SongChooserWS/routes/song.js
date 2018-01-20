@@ -130,8 +130,8 @@ router.post("/generateSong", function (req, res) {
 
     const exportFolder = htmlFiles;
 
-    const lyrics = req.body.lyrics;
-    const title = req.body.title;
+    const lyrics = removeSmartQuotes(req.body.lyrics);
+    const title = removeSmartQuotes(req.body.title);
 
     const songPageName = ["Main Page.htm", "Main Page_files"];
     const destSongPath = [exportFolder + title + ".htm", exportFolder + title + "_files"];
@@ -216,5 +216,9 @@ function generateParagraph(title, text) {
     return paragraph;
 }
 
+function removeSmartQuotes(text) {
+    return text.replace(/[\u2018\u2019]/g, "'")
+        .replace(/[\u201C\u201D]/g, '"');
+}
 
 module.exports = router;

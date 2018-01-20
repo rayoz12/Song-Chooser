@@ -40,11 +40,9 @@ export default function SongChooserController(CRUDService, $scope, $compile, $ro
 
     const template_id = $routeParams.template; //preload if defined, otherwise undefined
 
-
-
     $scope.showSongPreview = false;
     let templateLoaded = false;
-    let templateID = null;
+    $scope.templateInfo = null;
 
     //result of searches are stored here
     $scope.songSearch = [];
@@ -58,7 +56,10 @@ export default function SongChooserController(CRUDService, $scope, $compile, $ro
             data.sort((a,b) => a.order_index - b.order_index);
             $scope.songList = data;
             templateLoaded = true;
-        })
+        });
+        TemplateService.GetById(template_id).then(data => {
+			$scope.templateInfo = data[0];
+        });
     }
 
     $scope.search = function (value, elem) {

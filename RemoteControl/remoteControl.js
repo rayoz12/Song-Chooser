@@ -122,7 +122,7 @@ function init() {
 	
 	const headings = $('<h2/>', {
 		id: "headings",
-		text: "Headings",
+		text: "Jump to Heading",
 		class: "text"
 	});
 	
@@ -195,6 +195,11 @@ function getHeadings() {
 			scrollToElem(targetWindowHeadings[i], dispWindow);
 			//console.log(this);
 		});
+		newElem.on("contextmenu", function (e) {
+			jumpToElem(targetWindowHeadings[i], dispWindow);
+			//console.log(this);
+			e.preventDefault();
+		});
 		headings.append(newElem);
 		headings.append(`<br/>`);
 	}
@@ -212,6 +217,10 @@ function scrollToElem(elem, windowContext) {
 	$('html, body', windowContext.document).stop().animate({
         scrollTop: $(elem).offset().top
     }, 2000);
+}
+
+function jumpToElem(elem, windowContext) {
+	windowContext.document.body.scrollTop = $(elem).offset().top;
 }
 
 function updateScroll(currentScroll, maxScroll) {
