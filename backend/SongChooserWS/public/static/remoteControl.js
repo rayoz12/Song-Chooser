@@ -60,7 +60,9 @@ css = `
 	max-height: 100px;
 	height: auto;
 	overflow-y: scroll;
+	overflow-x: scroll;
 	border: 1px solid white;
+	display: inline-block
 }
 
 .headingsList>span{
@@ -73,7 +75,6 @@ css = `
 let sheet = document.createElement('style');
 sheet.innerHTML = css;
 document.body.appendChild(sheet);
-
 
 window.originalSetInterval=window.setInterval;
 window.originalClearInterval=window.clearInterval;
@@ -153,6 +154,9 @@ function init() {
 	
 	const linksDiv = document.getElementsByClassName("WordSection1")[0];
 	$(linksDiv).prepend(UIDiv);
+	
+	headingsList.width($(h1).width())
+	
 }
 
 $("a").on("click", function (e) {

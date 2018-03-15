@@ -10,9 +10,9 @@
 //};
 
 exports.dbConfig = {
-    password: "password",
+    password: "ryan1996!",
     user: "root",
-	host: "localhost",
+	host: "mysqldb1.chvxgnffufpo.ap-southeast-2.rds.amazonaws.com",
     database: "songchooser",
 };
 

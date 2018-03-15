@@ -60,7 +60,9 @@ css = `
 	max-height: 100px;
 	height: auto;
 	overflow-y: scroll;
+	overflow-x: scroll;
 	border: 1px solid white;
+	display: inline-block
 }
 
 .headingsList>span{
@@ -73,7 +75,6 @@ css = `
 let sheet = document.createElement('style');
 sheet.innerHTML = css;
 document.body.appendChild(sheet);
-
 
 window.originalSetInterval=window.setInterval;
 window.originalClearInterval=window.clearInterval;
@@ -122,7 +123,7 @@ function init() {
 	
 	const headings = $('<h2/>', {
 		id: "headings",
-		text: "Jump to Heading",
+		text: "Headings",
 		class: "text"
 	});
 	
@@ -153,6 +154,9 @@ function init() {
 	
 	const linksDiv = document.getElementsByClassName("WordSection1")[0];
 	$(linksDiv).prepend(UIDiv);
+	
+	headingsList.width($(h1).width())
+	
 }
 
 $("a").on("click", function (e) {
@@ -195,11 +199,6 @@ function getHeadings() {
 			scrollToElem(targetWindowHeadings[i], dispWindow);
 			//console.log(this);
 		});
-		newElem.on("contextmenu", function (e) {
-			jumpToElem(targetWindowHeadings[i], dispWindow);
-			//console.log(this);
-			e.preventDefault();
-		});
 		headings.append(newElem);
 		headings.append(`<br/>`);
 	}
@@ -217,10 +216,6 @@ function scrollToElem(elem, windowContext) {
 	$('html, body', windowContext.document).stop().animate({
         scrollTop: $(elem).offset().top
     }, 2000);
-}
-
-function jumpToElem(elem, windowContext) {
-	windowContext.document.body.scrollTop = $(elem).offset().top;
 }
 
 function updateScroll(currentScroll, maxScroll) {
