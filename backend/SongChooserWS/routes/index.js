@@ -1,5 +1,6 @@
 ﻿var express = require("express");
 var router = express.Router();
+var routerAPI = express.Router();
 
 var path = require("path");
 let jwt = require("jsonwebtoken");
@@ -26,7 +27,7 @@ require("fs").readdirSync(normalizedPath).forEach(function (file, index) {
     let camel = "/" + camelise(path.basename(file, ".js"));
     let fileLoc = "./" + file;
     try {
-        router.use(camel, require(fileLoc));
+        routerAPI.use(camel, require(fileLoc));
         loadedFiles++;
     }
     catch (e) {
@@ -59,6 +60,7 @@ router.get("/", function (req, res) {
     res.redirect("/SongChooser");
 });
 
+router.use("/API", routerAPI);
 module.exports = router;
 
 function camelise(str) {

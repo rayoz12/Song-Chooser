@@ -63,7 +63,14 @@ function SettingsService($rootScope) {
     } else {
         port = "/"
     }
-
+	
+	/**
+     * API Path
+     * @type {string}
+     * @memberOf app.services.SettingsService
+     */
+	let path = "API/";
+	
     /**
      * The locales already pre configured in code.
      * @constant
@@ -96,7 +103,7 @@ function SettingsService($rootScope) {
      * @memberOf app.services.SettingsService
      * @type {string}
      */
-    service.apiAccess = protocol + url + port;
+    service.apiAccess = protocol + url + port + path;
 
     service.setLocale = setLocale;
 
