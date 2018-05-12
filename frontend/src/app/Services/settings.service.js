@@ -104,6 +104,12 @@ function SettingsService($rootScope) {
      * @type {string}
      */
     service.apiAccess = protocol + url + port + path;
+	
+	service.HTMLFiles = protocol + url + port + "HTML_Files/"
+	
+	service.serverLocation = protocol + url + port;
+	
+	service.appLocation = protocol + url + port + "SongChooser/";
 
     service.setLocale = setLocale;
 

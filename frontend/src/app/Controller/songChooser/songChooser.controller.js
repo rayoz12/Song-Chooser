@@ -147,7 +147,7 @@ export default function SongChooserController(CRUDService, $scope, $compile, $ro
 
     function setSongPreview(path) {
         const preview = document.getElementById("songPreview");
-		const url = SettingsService.apiAccess.slice(0,-1);
+		const url = SettingsService.serverLocation.slice(0,-1);
         preview.src = url + path.slice(1);
         $scope.showSongPreview = true;
     }

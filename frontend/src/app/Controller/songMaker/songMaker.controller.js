@@ -46,7 +46,7 @@ export default function SongMakerController(CRUDService, $scope, $compile, $rout
 		let tab = window.open();
 		const postData = {title: $scope.title, lyrics: $scope.verses};
 		SongService.customEndpoint("/generateSong", postData, 'post').then(data => {
-			const url = SettingsService.apiAccess.slice(0,-1);
+			const url = SettingsService.serverLocation.slice(0,-1);
 			console.log("location:", url + data.path.slice(1));
 			tab.location = url + data.path.slice(1);
 		});
