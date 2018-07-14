@@ -7,7 +7,7 @@
                 <input type="text" class="form-control" id="song" ng-model="searchTerm" search placeholder="Search for a song"/>
                 <i class="fa fa-search fa-2x form-control-feedback" aria-hidden="true"></i>
                 <ul class="list-group">
-                    <li class="list-group-item" ng-repeat="song in songSearch"  ng-click="selectSong(song)">
+                    <li class="list-group-item" ng-repeat="song in songSearch" ng-click="selectSong(song)">
                         {{song.song_name}}
                     </li>
                     <li class="list-group-item" ng-if="songSearch.length == 0 && searchTerm.length > 3">

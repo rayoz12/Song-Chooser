@@ -23,13 +23,13 @@ app.directive('search', function () {
     return function ($scope, element) {
         const trigger = () => {
             const val = element.val();
-            $scope.search(val, element);
+            $scope.search(val, element[0]);
         };
         element.bind("keyup", function (event) {
             const val = element.val();
             //only execute after 3 letters
             if (val.length >= 3) {
-                $scope.search(val, element);
+                $scope.search(val, element[0]);
             }
         });
         //This also attaches a click handler to the search icon on the search bar if it can find it.

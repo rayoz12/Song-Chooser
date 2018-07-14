@@ -45,5 +45,9 @@ export default function TemplateListController(CRUDService, $scope, $location) {
 
 	$scope.songUpload = function () {
 		$location.url('/SongUpload/')
+    };
+    
+    $scope.templateWizard = function () {
+		$location.url('/templateWizard/')
 	};
 }
