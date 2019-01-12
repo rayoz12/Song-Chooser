@@ -1,5 +1,6 @@
 import express from 'express'
 import * as bodyParser from "body-parser";
+import fileUpload from 'express-fileupload'
 
 import { TemplateController } from "./controllers/template.controller";
 import { RootEndpoints } from '../../SC_Common/URLEndpoints';
@@ -15,6 +16,8 @@ class App {
     }
 
     private initialiseMiddleware() {
+        this.app.use(fileUpload({ preserveExtension: true }));
+
         // support application/json type post data
         this.app.use(bodyParser.json());
 

@@ -2,7 +2,31 @@
     "server": {
         "port": 8080
     },
-    "html_files": {
-        "location": "./HTML_Files"
+    "packaging": {
+        "html_files": "./HTML_Files",
+        "input_files": {
+            "main_page": {
+                "location": [
+                    "./public/static/Main_Stripped.htm",
+                    "./public/static/Main_Stripped_files"
+                ],
+                "name": [
+                    "Main Page.htm",
+                    "Main Page_files"
+                ]
+            },
+            "remote_control": {
+                "location": "./public/static/remoteControl.js",
+                "name": "remoteControl.js"
+            },
+            "jquery": {
+                "location": "./public/static/jquery-3.2.1.min.js",
+                "name": "jquery-3.2.1.min.js"
+            }
+        },
+        "output_paths": {
+            "stagedPath": "./public/staged/",
+            "zippedPath": "./public/zipped/"
+        }
     }
 }
