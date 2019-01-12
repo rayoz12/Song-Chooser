@@ -1,7 +1,0 @@
-Credits:
-Editable Text
-http://jsfiddle.net/joshdmiller/NDFHg/
-Sidebar generation
-http://www.jqwidgets.com/building-menu-from-json/
-angular templates for ng include
-https://blog.johnnyreilly.com/2016/05/inlining-angular-templates-with-webpack.html
