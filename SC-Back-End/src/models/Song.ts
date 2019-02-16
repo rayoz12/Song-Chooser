@@ -1,9 +1,10 @@
-import { Table, Column, Model, HasMany } from 'sequelize-typescript';
-import { ISong } from '../../../SC_Common/DBModels';
+import { Table, Column, Model, HasMany, PrimaryKey } from 'sequelize-typescript';
+import { ISong } from '../../../SC-Common/DBModels';
 
 @Table
 export class Song extends Model<Song> implements ISong {
 
+    @PrimaryKey
     @Column
     id!: number
 

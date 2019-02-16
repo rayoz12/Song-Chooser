@@ -1,10 +1,11 @@
-import { Table, Column, Model, HasMany } from 'sequelize-typescript';
+import { Table, Column, Model, HasMany, PrimaryKey } from 'sequelize-typescript';
 import { TemplateDetail } from './TemplateDetail';
-import { ITemplate } from '../../../SC_Common/DBModels';
+import { ITemplate } from '../../../SC-Common/DBModels';
 
 @Table
 export class Template extends Model<Template> implements ITemplate {
 
+    @PrimaryKey
     @Column
     id!: number
 

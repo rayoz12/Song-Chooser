@@ -1,5 +1,5 @@
 import { Router, Request, Response } from "express";
-import { TemplateEndpoints } from "./../../../SC_Common/URLEndpoints";
+import { TemplateEndpoints } from "./../../../SC-Common/URLEndpoints";
 import { Template } from "../models/Template";
 import { TemplateDetail } from "../models/TemplateDetail";
 import { Song } from "../models/Song";

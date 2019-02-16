@@ -2,8 +2,8 @@ import express from 'express'
 import * as bodyParser from "body-parser";
 import fileUpload from 'express-fileupload'
 
-import { TemplateController } from "./controllers/template.controller";
-import { RootEndpoints } from '../../SC_Common/URLEndpoints';
+import * as controllers from "./controllers";
+import { RootEndpoints } from '../../SC-Common/URLEndpoints';
 
 class App {
 
@@ -26,7 +26,8 @@ class App {
     }
 
     private initialiseControllers() {
-        this.app.use(RootEndpoints.TEMPLATE, TemplateController);
+        this.app.use(RootEndpoints.TEMPLATE, controllers.TemplateController);
+        this.app.use(RootEndpoints.HYMN, controllers.HymnController);
     }
 }
 

@@ -1,7 +1,7 @@
 import { Table, Column, Model, HasMany, ForeignKey, BelongsTo, HasOne, PrimaryKey } from 'sequelize-typescript';
 import { Template } from './Template';
 import { Song } from './Song';
-import { ITemplateDetail } from '../../../SC_Common/DBModels';
+import { ITemplateDetail } from '../../../SC-Common/DBModels';
 
 @Table
 export class TemplateDetail extends Model<TemplateDetail> implements ITemplateDetail {

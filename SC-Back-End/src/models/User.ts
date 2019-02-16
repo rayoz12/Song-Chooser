@@ -1,9 +1,10 @@
-import { IUser } from "./../../../SC_Common/DBModels";
-import { Table, Model, Column } from "sequelize-typescript";
+import { IUser } from "./../../../SC-Common/DBModels";
+import { Table, Model, Column, PrimaryKey } from "sequelize-typescript";
 
 @Table
 export class User extends Model<User> implements IUser {
 
+    @PrimaryKey
     @Column
     id!: number
 

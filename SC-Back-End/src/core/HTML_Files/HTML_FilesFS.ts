@@ -28,7 +28,7 @@ export class HTML_FilesFS implements IHTML_FilesAL {
     
     async getAllFiles(): Promise<IHTML_File[]> {
         if (!this.isInitialised())
-            throw new Error(HTML_FilesFSError.NOT_INITIALISED);
+            await this.initialise();
         
         const files = await fs.readdir(this.htmlFiles_root);
         const promiseArray: Promise<fs.Stats>[] = [];
@@ -51,7 +51,7 @@ export class HTML_FilesFS implements IHTML_FilesAL {
 
     async getFilebyName(name: string): Promise<IHTML_File | undefined> {
         if (!this.isInitialised())
-            throw new Error(HTML_FilesFSError.NOT_INITIALISED);
+            await this.initialise();
         
         const file = this.file_cache.find(item => item.name === name);
         if (file !== undefined) {
@@ -76,31 +76,31 @@ export class HTML_FilesFS implements IHTML_FilesAL {
         }
     }
 
-    getTextinFile(name: string): Promise<string> {
+    async getTextinFile(name: string): Promise<string> {
         if (!this.isInitialised())
-            throw new Error(HTML_FilesFSError.NOT_INITIALISED);
+            await this.initialise();
         
         return fs.readFile(this.htmlFiles_root + name, 'utf8');
     }
 
-    getTextByPath(path: string): Promise<string> {
+    async getTextByPath(path: string): Promise<string> {
         if (!this.isInitialised())
             throw new Error(HTML_FilesFSError.NOT_INITIALISED);
 
         return fs.readFile(path, 'utf8');
     }
 
-    copyFile(name: string[], destination: string[]): Promise<string> {
+    async copyFile(name: string[], destination: string[]): Promise<string> {
         throw new Error("Method not implemented.");
     }
 
-    writeFile(name: string, text: string): Promise<void> {
+    async writeFile(name: string, text: string): Promise<void> {
         if (!this.isInitialised())
             throw new Error(HTML_FilesFSError.NOT_INITIALISED);
         throw new Error("Method not implemented.");
     }
 
-    appendToFile(): Promise<void> {
+    async appendToFile(): Promise<void> {
         if (!this.isInitialised())
             throw new Error(HTML_FilesFSError.NOT_INITIALISED);
         throw new Error("Method not implemented.");

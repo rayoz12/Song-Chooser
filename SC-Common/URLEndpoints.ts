@@ -1,6 +1,7 @@
 export enum RootEndpoints {
     TEMPLATE = "/template",
-    PACKAGE = "/package"
+    PACKAGE = "/package",
+    HYMN = "/hymn"
 }
 
 export enum TemplateEndpoints {
@@ -13,4 +14,8 @@ export enum TemplateEndpoints {
 export enum PackageEndpoints {
     UPLOAD_SONG = "/upload-song",
     PACKAGE = "/package"
+}
+
+export enum HymnEndpoints {
+    GET_PARAGRAPHS = "/paragraphs/", // + <id> or <name>(inluding extention), GET
 }

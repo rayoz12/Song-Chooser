@@ -3,7 +3,7 @@
         "port": 8080
     },
     "packaging": {
-        "html_files": "./HTML_Files",
+        "html_files": "./HTML_Files/",
         "input_files": {
             "main_page": {
                 "location": [

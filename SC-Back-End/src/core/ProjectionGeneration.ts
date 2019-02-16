@@ -1,6 +1,6 @@
 import * as path from "path";
 import { get } from "config";
-import { ITemplateDetail } from "../../../SC_Common/DBModels";
+import { ITemplateDetail } from "../../../SC-Common/DBModels";
 
 /**
  * This class handles generating the projections based of a fully resolved template detail list

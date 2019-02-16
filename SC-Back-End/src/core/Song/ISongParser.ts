@@ -1,26 +1,4 @@
-export interface IParagraph {
-    getTitle(): string;
-    getContents(): string;
-}
-
-export class Paragraph implements IParagraph {
-    private title: string
-    private contents: string
-    
-    
-    constructor(title: string, contents: string) {
-        this.title = title;
-        this.contents = contents;
-    }
-
-    getTitle(): string {
-        return this.title;
-    }
-
-    getContents(): string {
-        return this.contents;
-    }
-}
+import { IParagraph } from "../../../../SC-Common/DBModels";
 
 export interface ISongParser {
     getTitle(): string;
