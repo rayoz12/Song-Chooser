@@ -24,6 +24,15 @@ export interface ITemplateDetail {
     template_song_name: string
 }
 
+export interface ISongText {
+    id: number,
+    song_id: number,
+    song?: ISong,
+    text_id: number,
+    text?: IText
+}
+
+
 export interface IParagraph {
     title: string;
     contents: string;

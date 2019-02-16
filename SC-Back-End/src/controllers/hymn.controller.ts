@@ -23,7 +23,10 @@ router.get(HymnEndpoints.GET_PARAGRAPHS + ":identifier", async (req: Request, re
         const HTMLParser = new HTMLWordHymnParser(text);
         console.log(hymnID);
         
-        res.json(HTMLParser.getTitle());
+        res.json({
+            title: HTMLParser.getTitle(),
+            paragraphs: HTMLParser.getParagraphs()
+        });
     }
     catch(e) {
         res.status(500).json(e);

@@ -2,7 +2,7 @@ import { load } from "cheerio";
 import { ISongParser } from "./ISongParser";
 import { IParagraph } from "../../../../SC-Common/DBModels";
 
-export class HTMLWordHymnParser implements ISongParser{
+export class HTMLWordHymnParser implements ISongParser {
     
     private $: CheerioStatic;
 
@@ -30,6 +30,7 @@ export class HTMLWordHymnParser implements ISongParser{
     private constructParagraph() {
         const titles = this.getParagraphTitles();
         const paragraphText = this.getDocumentParagraphText();
+
         console.log("title", titles, "paragraphs", paragraphText);
     }
 
