@@ -19,25 +19,6 @@ const scrollConfig = [{
 	clickHandler: scrollStop
 }];
 
-
-function Log(timestampEnabled) {
-	this.timestampEnabled = timestampEnabled;
-}
-
-Log.prototype.log = function (string) {
-	let logString = "";
-	if (this.timestampEnabled)
-		logString += new Date().toString();
-}
-
-Log.prototype.warning = function (string) {
-	
-}
-
-Log.prototype.error = function (string) {
-	
-}
-
 //Style sheet
 
 css = `
@@ -53,7 +34,7 @@ css = `
 
 .scrollInfo {
 	padding-top: 5%;
-	font-size: 2em;
+	font-size: 30px;
 }
 
 .headingsList {
@@ -84,7 +65,7 @@ window.setInterval = function(func,delay)
 {
 	const intervalID = window.originalSetInterval(func,delay);
 	window.activeIntervals.push(intervalID);
-	console.log("Interval Registered:", intervalID);
+	// console.log("Interval Registered:", intervalID);
 	return intervalID
 };
 
@@ -95,15 +76,48 @@ window.clearInterval = function(intervalID)
 		console.log("Interval:", intervalID, "doesn't exist");
 	else {
 		window.activeIntervals.splice(index, 1);
-		console.log("Interval Cleared:", intervalID);
+		// console.log("Interval Cleared:", intervalID);
 	}
 	window.originalClearInterval(intervalID);
 };
 
+//---------------------------------Feature Detection---------------------------------------
+pipEnabled = true;
+if (!('pictureInPictureEnabled' in document)) {
+	console.warn('The Picture-in-Picture Web API is not available.');
+	pipEnabled = false;
+}
+else if (!document.pictureInPictureEnabled) {
+	console.warn('The Picture-in-Picture Web API is disabled.');
+	pipEnabled = false;
+}
 
+
+//-------------------------Start Presentation software Logic-------------------------------
 //GLOBAL VARIABLES
+//----------Presentation window variables-------------
 dispWindow = null;
 scrollInterval = null;
+
+closedWindowTimeout = 5000;
+closedWindowTimeoutID = null;
+
+//--------------------Picture in picture variables-----
+pipDrawInterval = 300;
+pipDrawIntervalID = null;
+
+dispWindowCanvas = document.createElement('canvas');
+dispWindowCtx = dispWindowCanvas.getContext('2d');
+dispWindowCtx.fillRect(0, 0, dispWindowCanvas.width, dispWindowCanvas.height);
+document.body.append(dispWindowCtx);
+
+video = document.createElement('video');
+video.muted = true;
+const framerate = Math.ceil(1000 / pipDrawInterval);
+video.srcObject = dispWindowCanvas.captureStream(framerate < 1 ? 1 : framerate); //determine framerate from drawInterval
+video.play();
+
+pipButtonElem = null;
 
 
 function init() {
@@ -146,8 +160,17 @@ function init() {
 		button.addEventListener("click", scroll.clickHandler);
 		controlsDiv.appendChild(button);
 	}
+
+	if (pipEnabled) {
+		pipButtonElem = document.createElement("button");
+		pipButtonElem.id = "togglePipButton";
+		pipButtonElem.innerHTML = "Toggle Picture in Picture";
+		pipButtonElem.hidden = true;
+		pipButtonElem.addEventListener("click", initPictureinPicture);
+	}
 	
 	UIDiv.append(controlsDiv);
+	if (pipEnabled) UIDiv.append(pipButtonElem);
 	UIDiv.append(scrollPercent);
 	UIDiv.append(headings);
 	UIDiv.append(headingsList);
@@ -158,9 +181,76 @@ function init() {
 	headingsList.width($(h1).width())
 	
 }
+//------------------------------Picture in picture mode--------------------------
+async function initPictureinPicture() {
+	//already enabled
+	if (pipDrawIntervalID)
+		return;
+	pipButtonElem.disabled = true;
+	try {
+		await video.requestPictureInPicture();
+		setUpPipDrawInterval();
+	}
+	catch (e) {
+		console.error(e.message, e);
+	}
+	finally {
+		pipButtonElem.disabled = false;
+	}
+}
 
-$("a").on("click", function (e) {
-	console.log(dispWindow);
+async function setUpPipDrawInterval() {
+	pipDrawIntervalID = setInterval(async () => {
+		if (!dispWindow || dispWindow.closed)
+			return;
+		
+		const isTallerthanViewPort = $(dispWindow).height() > dispWindow.innerHeight;
+		await html2canvas(dispWindow.document.body, { 
+			canvas: dispWindowCanvas, 
+			x: dispWindow.scrollX,
+			y: dispWindow.scrollY + 10,
+			width: dispWindow.innerWidth - 30,
+			height: dispWindow.innerHeight - 10,
+			logging: true,
+		});
+		// const canvas = await html2canvas(dispWindow.document.body, { type: 'view' });
+		// dispWindowCanvas.width = canvas.width;
+		// dispWindowCanvas.height = canvas.height;
+		// dispWindowCtx.clearRect(0, 0, dispWindowCanvas.width, dispWindowCanvas.height);
+		// dispWindowCtx.drawImage(canvas, 0, 0);
+		
+	}, pipDrawInterval)
+}
+
+async function clearPipDrawInterval() {
+	clearInterval(pipDrawIntervalID);
+	pipDrawIntervalID = null;
+}
+
+// Note that this can happen if user clicked the "Toggle Picture-in-Picture"
+// button but also if user clicked some browser context menu or if
+// Picture-in-Picture was triggered automatically for instance.
+video.addEventListener('enterpictureinpicture', function (event) {
+	console.log('> Video entered Picture-in-Picture');
+
+	pipWindow = event.pictureInPictureWindow;
+	console.log(`> Window size is ${pipWindow.width}x${pipWindow.height}`);
+
+});
+
+video.addEventListener('leavepictureinpicture', function (event) {
+	console.log('> Video left Picture-in-Picture');
+	clearPipDrawInterval();
+});
+
+
+//------------------------------Event Handlers--------------------------
+
+document.querySelectorAll("a").forEach(elem => $(elem).on("click", async function (e) {
+	// console.log(dispWindow);
+	e.preventDefault();
+	e.stopPropagation();
+
 	if (dispWindow === null)
 		openWindow(this.href);
 	else {
@@ -172,16 +262,27 @@ $("a").on("click", function (e) {
 			openWindow(this.href);
 		}
 	}
-	setTimeout(() => {
-		targetWindowLoaded();
-	}, 100);
-	console.log(this);
-	e.preventDefault();
-});
+
+	// await initPictureinPicture();
+
+	
+}));
 
 //called whenever the target window loads a new page.
 function targetWindowLoaded() {
 	getHeadings();
+
+	pipButtonElem.hidden = false;
+}
+
+/**
+ * Called when the target window is unloaded.
+ */
+function targetWindowClosed() {
+	dispWindow = null;
+	pipButtonElem.hidden = true;
+	clearPipDrawInterval();
+	console.log("window closed");
 }
 
 function getHeadings() {
@@ -206,10 +307,22 @@ function getHeadings() {
 
 function openWindow(url) {
 	dispWindow = window.open(url);
-	$(dispWindow).on('load', () => {
-	    console.log("loaded on url:", dispWindow.location.href);
-		targetWindowLoaded();
-	});
+
+	dispWindow.onbeforeunload = () => {
+		closedWindowTimeoutID = setTimeout(() => {
+			// console.log("child window closed");
+			targetWindowClosed();
+		}, closedWindowTimeout);
+
+		setTimeout(() => {
+			$(dispWindow).ready(() => {
+				console.log("loaded on url:", dispWindow.location.href);
+				clearTimeout(closedWindowTimeoutID);
+				targetWindowLoaded();
+			});
+		}, 2000);
+
+	}
 }
 
 function scrollToElem(elem, windowContext) {
